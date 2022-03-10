@@ -1,19 +1,19 @@
+use clap::Parser;
 use std::io;
 use std::io::prelude::*;
-use structopt::StructOpt;
 
-#[derive(StructOpt, Debug)]
-#[structopt(about = "split & transpose")]
-struct Opt {
-    #[structopt(short, long)]
+#[derive(Parser, Debug)]
+#[clap(version, about = "split & transpose")]
+struct Args {
+    #[clap(short, long)]
     lines: usize,
 
-    #[structopt(short, long, default_value = "\t")]
+    #[clap(short, long, default_value = "\t")]
     delimiter: String,
 }
 
 fn main() {
-    let opt = Opt::from_args();
+    let args = Args::parse();
 
     let mut lines: Vec<String> = Vec::new();
     let stdin = io::stdin();
@@ -21,8 +21,8 @@ fn main() {
         let line = line.expect("Failed to read line");
         lines.push(line);
 
-        if lines.len() == opt.lines {
-            println!("{}", lines.join(&opt.delimiter));
+        if lines.len() == args.lines {
+            println!("{}", lines.join(&args.delimiter));
             lines.clear();
         }
     }
